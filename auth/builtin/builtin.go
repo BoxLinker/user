@@ -1,7 +1,7 @@
 package builtin
 
 import (
-	"github.com/BoxLinker/boxlinker-api/auth"
+	"github.com/BoxLinker/user/auth"
 	"golang.org/x/crypto/bcrypt"
 )
 

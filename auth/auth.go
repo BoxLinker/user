@@ -1,17 +1,17 @@
 package auth
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"errors"
 	"time"
+
+	settings "github.com/BoxLinker/user/settings"
+	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
-	_ "github.com/Sirupsen/logrus"
-	settings "github.com/BoxLinker/boxlinker-api/settings/user"
 	"golang.org/x/crypto/scrypt"
 )
 
 type (
-	Authenticator interface{
+	Authenticator interface {
 		Authenticate(username, password, hash string) (bool, error)
 		GenerateToken(uid string, username string, exp ...int64) (string, error)
 		IsUpdateSupported() bool
@@ -25,7 +25,7 @@ func Hash(data string) (string, error) {
 }
 
 func HashPassword(password string) (string, error) {
-	h, err := scrypt.Key([]byte(password),[]byte(settings.USER_PASSWORD_SALT), 16384, 8, 1, 3)
+	h, err := scrypt.Key([]byte(password), []byte(settings.USER_PASSWORD_SALT), 16384, 8, 1, 3)
 	return string(h[:]), err
 }
 
@@ -49,11 +49,11 @@ func AuthToken(tokenString string) (bool, map[string]interface{}, error) {
 		return false, nil, nil
 	}
 
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error){
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(settings.TOKEN_KEY), nil
 	})
 	if err != nil {
-		return false, nil ,err
+		return false, nil, err
 	}
 	if !token.Valid {
 		return false, nil, errors.New("token is invalid")
@@ -66,7 +66,7 @@ func AuthToken(tokenString string) (bool, map[string]interface{}, error) {
 	}
 
 	return true, map[string]interface{}{
-		"uid": claims["uid"],
+		"uid":      claims["uid"],
 		"username": claims["username"],
 	}, nil
 

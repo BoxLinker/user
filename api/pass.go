@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	emailApi "github.com/BoxLinker/boxlinker-api/api/v1/email"
-	"github.com/BoxLinker/boxlinker-api/auth"
+	emailApi "github.com/BoxLinker/email/api"
+	"github.com/BoxLinker/user/auth"
 	userModels "github.com/BoxLinker/user/models"
 
 	"encoding/json"

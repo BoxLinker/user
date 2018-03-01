@@ -13,7 +13,7 @@ import (
 	"encoding/json"
 	"time"
 
-	emailApi "github.com/BoxLinker/boxlinker-api/api/v1/email"
+	emailApi "github.com/BoxLinker/email/api"
 	userSettings "github.com/BoxLinker/user/settings"
 	"github.com/Sirupsen/logrus"
 )

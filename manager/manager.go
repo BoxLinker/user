@@ -1,21 +1,17 @@
 package manager
 
 import (
-	mAuth "github.com/BoxLinker/boxlinker-api/auth"
 	"errors"
+
+	mAuth "github.com/BoxLinker/user/auth"
 )
 
 type Manager interface {
 	VerifyAuthToken(token string) (map[string]interface{}, error)
-
-
 }
 
 type DefaultManager struct {
 }
-
-
-
 
 func (m DefaultManager) VerifyAuthToken(token string) (map[string]interface{}, error) {
 	errFailed := errors.New("Token 解析失败")
@@ -42,7 +38,7 @@ func (m DefaultManager) VerifyAuthToken(token string) (map[string]interface{}, e
 	}
 
 	return map[string]interface{}{
-		"uid": _uid.(string),
+		"uid":      _uid.(string),
 		"username": _username.(string),
 	}, nil
 }
