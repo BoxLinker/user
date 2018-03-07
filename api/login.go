@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -70,21 +71,21 @@ func (a *Api) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if u == nil {
-		httplib.Resp(w, httplib.STATUS_NOT_FOUND, nil, "user not found")
+		httplib.Resp(w, httplib.STATUS_NOT_FOUND, nil, fmt.Sprintf("用户 %s 还没有注册", form.Username))
 		return
 	}
 	success, err := a.manager.VerifyUsernamePassword(form.Username, form.Password, u.Password)
 	if err != nil {
-		httplib.Resp(w, 1, nil, err.Error())
+		httplib.Resp(w, httplib.STATUS_INTERNAL_SERVER_ERR, nil, err.Error())
 		return
 	}
 	if !success {
-		httplib.Resp(w, 1, nil, "failed")
+		httplib.Resp(w, httplib.STATUS_FAILED, nil, "用户名或密码错误")
 		return
 	}
 	token, err := a.manager.GenerateToken(u.Id, u.Name)
 	if err != nil {
-		httplib.Resp(w, 1, nil, err.Error())
+		httplib.Resp(w, 1, nil, fmt.Sprintf("token 错误: %v", err))
 		return
 	}
 	cookie := &http.Cookie{

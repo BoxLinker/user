@@ -23,7 +23,7 @@ func (a *AuthRequired) HandlerFuncWithNext(w http.ResponseWriter, r *http.Reques
 	token := r.Header.Get("X-Access-Token")
 	data, err := a.manager.VerifyAuthToken(token)
 	if err != nil {
-		httplib.Resp(w, 1, nil, err.Error())
+		httplib.Resp(w, httplib.STATUS_UNAUTHORIZED, nil, err.Error())
 		return
 	}
 	if next != nil {
