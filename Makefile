@@ -1,9 +1,9 @@
 all: push
 
-PREFIX=index.boxlinker.com/boxlinker
+PREFIX=registry.cn-beijing.aliyuncs.com/cabernety#index.boxlinker.com/boxlinker
 
 IMAGE_APP=user-server
-IMAGE_APP_TAG=${shell git describe --tags --long}
+IMAGE_APP_TAG=v1.0.1#${shell git describe --tags --long}
 
 build:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -o user

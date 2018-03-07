@@ -30,31 +30,9 @@ var (
 			Usage:  "server listen address",
 			EnvVar: "LISTEN",
 		},
-
 		cli.StringFlag{
-			Name:   "db-user",
-			Value:  "root",
-			EnvVar: "DB_USER",
-		},
-		cli.StringFlag{
-			Name:   "db-password",
-			Value:  "123456",
-			EnvVar: "DB_PASSWORD",
-		},
-		cli.StringFlag{
-			Name:   "db-host",
-			Value:  "127.0.0.1",
-			EnvVar: "DB_HOST",
-		},
-		cli.StringFlag{
-			Name:   "db-port",
-			Value:  "3306",
-			EnvVar: "DB_PORT",
-		},
-		cli.StringFlag{
-			Name:   "db-name",
-			Value:  "boxlinker",
-			EnvVar: "DB_NAME",
+			Name:   "database-source",
+			EnvVar: "DATABASE_DATASOURCE",
 		},
 
 		cli.StringFlag{
@@ -166,7 +144,7 @@ func action(c *cli.Context) error {
 	//	DBPort: 		c.Int("db-port"),
 	//	DBName: 		c.String("db-name"),
 	//})
-	engine, err := models.NewEngine(models.GetDBOptions(c), userModels.Tables())
+	engine, err := models.NewEngine(c.String("database-source"), userModels.Tables())
 	if err != nil {
 		return fmt.Errorf("new db engine err: %v", err)
 	}

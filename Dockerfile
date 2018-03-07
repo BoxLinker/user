@@ -3,9 +3,11 @@ RUN apk update
 RUN apk add ca-certificates
 RUN apk add -U tzdata
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-RUN mkdir -p /app/config
+# RUN mkdir -p /app/config
 
-COPY .env.prod /app/.env
-COPY user /app/user
+WORKDIR /bin
 
-CMD /app/user 
+COPY .env.prod /bin/.env
+COPY user /bin/user-server
+
+CMD ["./user-server"]
