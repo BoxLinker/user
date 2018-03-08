@@ -7,6 +7,7 @@ import (
 	emailApi "github.com/BoxLinker/email/api"
 	"github.com/BoxLinker/user/auth"
 	userModels "github.com/BoxLinker/user/models"
+	"golang.org/x/crypto/bcrypt"
 
 	"encoding/json"
 	"time"
@@ -73,6 +74,19 @@ func (a *Api) ResetPassword(w http.ResponseWriter, r *http.Request) {
 		httplib.Resp(w, httplib.STATUS_INTERNAL_SERVER_ERR, nil, err.Error())
 		return
 	}
+
+	// 验证原始密码有效性
+	user, err := a.manager.GetUserByName(u.Name)
+	if err != nil {
+		httplib.Resp(w, httplib.STATUS_INTERNAL_SERVER_ERR, nil, err.Error())
+		return
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(form.OldPassword)); err != nil {
+		httplib.Resp(w, httplib.STATUS_FAILED, nil, "原始密码不正确")
+		return
+	}
+
 	if success, err := a.manager.UpdatePassword(u.Id, hash); err != nil {
 		httplib.Resp(w, httplib.STATUS_INTERNAL_SERVER_ERR, nil, err.Error())
 		return
